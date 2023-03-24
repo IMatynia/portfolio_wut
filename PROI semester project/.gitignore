@@ -1,0 +1,7 @@
+bin/
+catch.hpp.gch
+.vscode/
+polecenia/
+*.log
+doc/
+*.odt#

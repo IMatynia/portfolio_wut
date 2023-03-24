@@ -1,0 +1,8 @@
+.pytest*
+__pycach*
+*.pyc
+.qt_for_python
+.vscode/
+notatki/
+simulations.py
+/*.json

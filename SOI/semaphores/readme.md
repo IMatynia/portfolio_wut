@@ -1,0 +1,2 @@
+# Laboratoria z systemów operacyjnych
+Podczas labów 3 i 4 mieliśmy za zadanie napisać w C/C++ bufory komunikacyjne z wykluczaniem. Konsument(ci) i producent(ci) znajdowali się w osobnych procesach, skąd wysyłali/pobierali komunikaty z bufora. Szczegóły implementacji znajdują się w plikach "dokumentacja.pdf" a instrukcja w "polecenie.txt"
