@@ -1,6 +1,15 @@
-# PAP - Programowanie aplikacyjne
+# PAP - Programowanie aplikacyjne / Application programming
 
-INFO
+
+In case of this semester project, we could choose the theme. In a team of 3, we have decided to create an app that is a warsaw public transport utility for a passenger, based on real world data stored on our project's database. It allows for the displaying of time tables, bus/tram/train routes on a map, bus/tram/train stop complexes (when there are multiple stops with the same name, but different number and location, also displayed on a map) and navigation. More information is available in "dokumentacja.pdf"
+
+Examples of my work:
+- stop complex map (`src/controllers/stop_layout.py`)
+- entirety of A* navigation algorithm (`src/lib/*`)
+- space-time chunking of the network graph for query optimization (`src/models/nav_*`)
+- some utilities such as the user config, MVC project structure or location picker (`src/models/user_config_model.py` `src/controllers/pick_location_widget.py`)
+
+All of the code is written in python. The UI was made using PySide6 (Qt for python).
 
 ---
 Original readme:
