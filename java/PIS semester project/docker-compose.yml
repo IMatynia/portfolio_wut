@@ -1,0 +1,224 @@
+version: '3.8'
+services:
+  api-gateway:
+    build: api-gateway/
+    image: api-gateway
+    container_name: api-gateway
+    hostname: api-gateway
+    expose:
+      - 8080
+    ports:
+      - '80:8080'
+    networks:
+      pis-network:
+        ipv4_address: 172.18.0.12
+    depends_on:
+      elastic-search-service:
+        condition: service_healthy
+      images-service:
+        condition: service_healthy
+      recipe-service:
+        condition: service_healthy
+      users-service:
+        condition: service_healthy
+  config-server:
+    build: config-server/
+    image: config-server
+    container_name: config-server
+    hostname: config-server
+    expose:
+      - 8888
+    ports:
+      - '8888:8888'
+    networks:
+      pis-network:
+        ipv4_address: 172.18.0.3
+    depends_on:
+      service-discovery:
+        condition: service_healthy
+    healthcheck:
+      test: curl localhost:8888
+      interval: 10s
+      retries: 15
+      timeout: 5s
+  elastic-search-service:
+    build: elastic-search-service/
+    image: elastic-search-service
+    hostname: elastic-search-service
+    container_name: elastic-search-service
+    expose:
+      - 9595
+    ports:
+      - '9595:9595'
+    networks:
+      pis-network:
+        ipv4_address: 172.18.0.8
+    depends_on:
+      config-server:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: curl localhost:9595
+      interval: 10s
+      retries: 15
+      timeout: 5s
+  elasticsearch:
+    image: 'elasticsearch:8.11.1'
+    container_name: elasticsearch
+    hostname: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.ml.enabled=false
+      - action.destructive_requires_name=false
+    expose:
+      - 9200
+    ports:
+      - '9200:9200'
+    networks:
+      pis-network:
+        ipv4_address: 172.18.0.6
+    healthcheck:
+      test: curl localhost:9200
+      interval: 10s
+      retries: 15
+      timeout: 5s
+  images-service:
+    build: images-service/
+    image: images-service
+    hostname: images-service
+    container_name: images-service
+    expose:
+      - 9898
+    ports:
+      - '9898:9898'
+    networks:
+      pis-network:
+        ipv4_address: 172.18.0.9
+    depends_on:
+      config-server:
+        condition: service_healthy
+      images-minio:
+        condition: service_started
+    healthcheck:
+      test: curl localhost:9898
+      interval: 10s
+      retries: 15
+      timeout: 5s
+  images-minio:
+    image: quay.io/minio/minio
+    container_name: images-minio
+    hostname: images-minio
+    command: 'server /data --console-address ":9001"'
+    expose:
+      - 9000
+      - 9001
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    networks:
+      pis-network:
+        ipv4_address: 172.18.0.7
+  recipe-service:
+    build: recipe-service/
+    image: recipe-service
+    container_name: recipe-service
+    hostname: recipe-service
+    expose:
+      - 9494
+    ports:
+      - '9494:9494'
+    networks:
+      pis-network:
+        ipv4_address: 172.18.0.10
+    depends_on:
+      config-server:
+        condition: service_healthy
+      recipe-service-db:
+        condition: service_healthy
+    healthcheck:
+      test: curl localhost:9494
+      interval: 10s
+      retries: 15
+      timeout: 5s
+  recipe-service-db:
+    build: recipe-service/src/main/resources/db/
+    image: recipe-service-db
+    container_name: recipe-service-db
+    hostname: recipe-service-db
+    expose:
+      - 5432
+    ports:
+      - '5433:5432'
+    networks:
+      pis-network:
+        ipv4_address: 172.18.0.5
+    healthcheck:
+      test: pg_isready
+      interval: 10s
+      retries: 15
+      timeout: 5s
+  service-discovery:
+    build: service-discovery/
+    image: service-discovery
+    container_name: service-discovery
+    hostname: service-discovery
+    expose:
+      - 8761
+    ports:
+      - '8761:8761'
+    networks:
+      pis-network:
+        ipv4_address: 172.18.0.2
+    healthcheck:
+      test: curl localhost:8761
+      interval: 10s
+      retries: 15
+      timeout: 5s
+  users-service:
+    build: users-service/
+    image: users-service
+    container_name: users-service
+    hostname: users-service
+    expose:
+      - 9696
+    ports:
+      - '9696:9696'
+    networks:
+      pis-network:
+        ipv4_address: 172.18.0.11
+    depends_on:
+      config-server:
+        condition: service_healthy
+      users-service-db:
+        condition: service_healthy
+    healthcheck:
+      test: curl localhost:9696
+      interval: 10s
+      retries: 15
+      timeout: 5s
+  users-service-db:
+    build: users-service/src/main/resources/db/
+    image: users-service-db
+    container_name: users-service-db
+    hostname: users-service-db
+    expose:
+      - 5432
+    ports:
+      - '5434:5432'
+    networks:
+      pis-network:
+        ipv4_address: 172.18.0.4
+    healthcheck:
+      test: pg_isready
+      interval: 10s
+      retries: 15
+      timeout: 5s
+networks:
+  pis-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1

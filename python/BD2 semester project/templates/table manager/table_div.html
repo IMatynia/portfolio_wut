@@ -1,0 +1,21 @@
+<div style="top: {{ table.y_position }}%; left: {{ table.x_position }}% "
+     data-toggle="popover"
+     class="text-center text-white table-style {{ table_state }}"
+     id="table_{{ table.id }}">
+    {{ table.id }}
+    <div hidden>
+        {% include "table manager/table_popover_content.html" with table=table table_state=table_state selected_date=selected_date %}
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        addNStools('#table_{{ table.id|safe }}', {{ table.seat_count|safe }});
+        $('#table_{{ table.id }}').popover({
+            title: "Table {{ table.name }}",
+            container: 'body',
+            html: true,
+            content: $('#table_{{ table.id|safe }}_popover')[0],
+            placement: "bottom"
+        });
+    });
+</script>

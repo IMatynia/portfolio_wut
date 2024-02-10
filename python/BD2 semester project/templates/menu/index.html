@@ -1,0 +1,102 @@
+<html>
+{% include 'utils/head_dependencies.html' with title='Menu manager' %}
+
+<body>
+{% include 'utils/primary_navbar.html' with nav_items=nav_items %}
+
+{% load custom %}
+
+<script>
+    $(document).ready(function () {
+        $(".menu-make-primary-button").click(function () {
+            sendDataToEndpointAndReload(
+                "/api/makemenuprimary/",
+                exctractPayloadFromProperties(
+                    $(this),
+                    ["menu"]
+                )
+            );
+        });
+
+        $(".menu-remove-button").click(function () {
+            sendDataToEndpointAndReload(
+                "/api/removemenu/",
+                exctractPayloadFromProperties(
+                    $(this),
+                    ["menu"]
+                )
+            );
+        });
+
+        $('#new-menu-form').on('submit', function (event) {
+            event.preventDefault();
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url: '/api/addmenu',
+                type: 'GET',
+                data: formData,
+                success: function (response) {
+                    console.log(response);
+                    if (response["error"] === null) {
+                        window.location.href = '/menumanager/edit/' + response["menu_id"] + "/";
+                    } else {
+                        alert(response["error"])
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>
+
+<div class="container">
+    <h1 class="display-4">Menu manager</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Menu names</th>
+            <th>Dish count</th>
+            <th>Active from</th>
+            <th>Active until</th>
+            <th>Options</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for menu in menus %}
+            <tr>
+                <td>{{ menu.name }}
+                    {% if menu.is_active %}
+                        <span class="bg-primary p-1 text-white rounded">CURRENT</span>
+                    {% endif %}
+                </td>
+                <td>{{ menu.dishes|length }}</td>
+                <td>{{ menu.menu_obj.day_start }} of {{ menu.menu_obj.month_start|monthtextual }}</td>
+                <td>{{ menu.menu_obj.day_end }} of {{ menu.menu_obj.month_end|monthtextual }}</td>
+                <td>{{ menu.dishes|length }}</td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a class="btn btn-primary" href="menumanager/edit/{{ menu.id }}/">Edit</a>
+{#                        <button class="btn btn-secondary menu-make-primary-button" data-menu="{{ menu.id }}">Make#}
+{#                            primary#}
+{#                        </button>#}
+                        <button class="btn btn-danger menu-remove-button" data-menu="{{ menu.id }}">Remove</button>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+{#    <form id="new-menu-form">#}
+{#        <div class="row g-3 align-items-center justify-content-center">#}
+{#            <div class="col-auto">#}
+{#                <input type="text" name="name" class="form-control" placeholder="New menu name">#}
+{#            </div>#}
+{#            <div class="col-auto">#}
+{#                <button class="btn btn-primary" type="submit" id="bt_create_new">Create new</button>#}
+{#            </div>#}
+{#    </form>#}
+</div>

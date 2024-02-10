@@ -1,0 +1,21 @@
+<div id="table_{{ table.id|safe }}_popover" class="row align-items-center justify-content-center">
+    <div class="row">
+        <div class="row">
+            <div class="col"><strong>Name</strong></div>
+            <div class="col">{{ table.name }}</div>
+        </div>
+        <div class="row">
+            <div class="col"><strong>Capacity</strong></div>
+            <div class="col">{{ table.seat_count }}</div>
+        </div>
+        <div class="row">
+            <div class="col"><strong>State</strong></div>
+            <div class="col">{{ table_state }}</div>
+        </div>
+    </div>
+    <hr>
+    <div class="row d-flex gap-3">
+        <button class="btn btn-light border" data-bs-toggle="modal" data-bs-target="#order_modal" data-time="{{ selected_date }}" data-tablename="{{ table.name }}" data-tableid="{{ table.id }}">Add order</button>
+        <button class="btn btn-light border" data-bs-toggle="modal" data-bs-target="#reservation_modal" data-time="{{ selected_date }}" data-tablename="{{ table.name }}" data-tableid="{{ table.id }}">Register reservation</button>
+    </div>
+</div>

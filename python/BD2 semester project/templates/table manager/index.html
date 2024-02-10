@@ -1,0 +1,43 @@
+<html>
+{% include 'utils/head_dependencies.html' with title='Table manager' %}
+
+<body>
+{% include 'utils/primary_navbar.html' with nav_items=nav_items %}
+
+<div class="container-lg p-3">
+    <H1 class="text-center">Tables layout</H1>
+    <div class="row d-flex gap-3 align-items-center justify-content-center m-3">
+        <div id="room" class="border bg-light rounded" style="width: 80vh; height: 80vh; position: relative">
+            {% for table in tables %}
+                {% include "table manager/table_div.html" with table=table.table table_state=table.state selected_date=selected_date %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <form method="GET" action="">
+            <div class="d-flex gap-2 align-items-center justify-content-center">
+                {% if not selected_date %}
+                    <p class="alert alert-warning my-0" data-toggle="tooltip" data-placement="top"
+                       title="All operations will be done in real time, displayed graphics are not updated">Realtime</p>
+                    <div class="form-check form-check-inline">
+                        <input class="form-control" type="datetime-local" id="time_input" name="time">
+                    </div>
+                {% else %}
+                    <a class="btn btn-light border" href="/tablemanager">Now</a>
+                    <div class="form-check form-check-inline">
+                        <input class="form-control" type="datetime-local" id="time_input" name="time"
+                               value="{{ selected_date }}">
+                    </div>
+                {% endif %}
+                <button type="submit" class="btn btn-success btn-lg">Refresh</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- HIDDEN ELEMENTS -->
+{% include "table manager/reservation_modal.html" %}
+{% include "table manager/order_modal.html" with all_dishes=all_dishes all_employees=all_employees %}
+
+</body>
+</html>

@@ -1,8 +1,0 @@
-*.pdf
-riscv_*
-*.o
-program
-source.bmp
-result.bmp
-*.gch
-.vscode

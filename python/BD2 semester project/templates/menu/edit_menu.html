@@ -1,0 +1,68 @@
+<html>
+{% include 'utils/head_dependencies.html' with title='Edit menu' %}
+
+<body>
+{% include 'utils/primary_navbar.html' with nav_items=nav_items %}
+
+<script>
+    $(document).ready(function () {
+        $('#new-offer-form').on('submit', function (event) {
+            event.preventDefault();
+            sendDataToEndpointAndReload(
+                "/api/addoffer/",
+                $(this).serialize()
+            )
+        });
+
+        $(".offer-remove-button").click(function () {
+            sendDataToEndpointAndReload(
+                "/api/removeoffer/",
+                exctractPayloadFromProperties(
+                    $(this),
+                    ["menu", "offer"]
+                )
+            );
+        });
+    });
+</script>
+
+<div class="container">
+    <h1 class="display-4">Editing // {{ menu.name }} (ID {{ menu.id }})</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Offer name</th>
+            <th>Offer price</th>
+            <th>Options</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for offer in menu.dishes %}
+            <tr>
+                <td>{{ offer.name }}</td>
+                <td>{{ offer.price|floatformat:2 }}zł</td>
+                <td>
+                    <button type="button" class="btn btn-close offer-remove-button" data-menu="{{ menu.id }}"
+                            data-offer="{{ offer.id }}" aria-label="Close"></button>
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    <form id="new-offer-form">
+        <div class="row g-3 align-items-center justify-content-center">
+            <input type="hidden" value="{{ menu.id }}" name="menu"/>
+            <div class="col-auto">
+                <select class="form-select" id="dropdown" name="offer">
+                    <option selected disabled>Select offer...</option>
+                    {% for offer in all_dishes %}
+                        <option value="{{ offer.id }}">{{ offer.name }} | {{ offer.price|floatformat:2 }}zł</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary" type="submit">Add new offer</button>
+            </div>
+    </form>
+</div>

@@ -1,7 +1,0 @@
-PROJECT_NAME        = "Sklep Z Plytami Winylowymi"
-OUTPUT_DIRECTORY    = doc
-INPUT               = src
-FILE_PATTERNS       = *.cpp *.h *.hpp
-EXCLUDE_PATTERNS    = json.hpp
-RECURSIVE           = YES
-GENERATE_LATEX      = NO

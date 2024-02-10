@@ -1,0 +1,50 @@
+<form action="/datavis" method="GET">
+    <div class="d-flex gap-3 align-items-center justify-content-between">
+        <div class="col">
+            <h5>Variables:</h5>
+            <div class="d-flex justify-content-start gap-3">
+                {% for code, var_object in variables.items %}
+                    {% if var_object in plot_preset.variables %}
+                        <div class="rounded-pill text-white px-3 py-2 bg-primary border">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="{{ code }}"
+                                       name="{{ code }}"
+                                       checked=>
+                                <label class="form-check-label unselecable"
+                                       for="{{ code }}">{{ var_object.display_name }}</label>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="rounded-pill px-3 py-2 bg-light border">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="{{ code }}"
+                                       name="{{ code }}">
+                                <label class="form-check-label unselecable"
+                                       for="{{ code }}">{{ var_object.display_name }}</label>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row align-items-center">
+            <div class="col-auto">
+                <label for="dropdown">Granularity</label>
+            </div>
+            <div class="col-auto">
+                <select name="grain" class="form-select" id="dropdown">
+                    {% for grain in granularities %}
+                        {% if grain == chosen_grain %}
+                            <option selected value="{{ grain }}">{{ grain|capfirst }}</option>
+                        {% else %}
+                            <option value="{{ grain }}">{{ grain|capfirst }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-success btn-lg">Refresh</button>
+            </div>
+        </div>
+    </div>
+</form>

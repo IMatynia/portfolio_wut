@@ -1,0 +1,33 @@
+<form id="order-creator" data-table="N/A">
+    <div id="offer-selection"></div>
+    <select class="form-select offer-selector">
+        <option selected disabled value="-1">Select offer...</option>
+        {% for offer in all_dishes %}
+            <option value="{{ offer.id }}">{{ offer.name }} | {{ offer.price|floatformat:2 }}zł</option>
+        {% endfor %}
+    </select>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $(".offer-selector").on("change", function (event) {
+            new_offer_id = $(this).val();
+            var new_offer_container = $('<div class="offer-container row py-2 g-3 align-items-center justify-content-space-between">');
+            var new_offer_text = $('<div class="col-11">');
+            var new_offer_remove = $('<button class="col-1 btn btn-close button-remove-offer">');
+
+            var offer_readable = $(this).find('option:selected').text();
+            new_offer_text.text(offer_readable);
+            new_offer_container.attr("data-offer", new_offer_id);
+
+            new_offer_remove.click(function () {
+                $(this).parent().remove();
+            })
+
+            new_offer_container.append(new_offer_text);
+            new_offer_container.append(new_offer_remove);
+            $('#offer-selection').append(new_offer_container);
+            $(this).val(-1);
+        });
+    });
+</script>

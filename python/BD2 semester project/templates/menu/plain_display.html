@@ -1,0 +1,49 @@
+<html>
+{% include 'utils/head_dependencies.html' with title='Menu display' %}
+
+<body>
+{% include 'utils/primary_navbar.html' with nav_items=nav_items %}
+<div class="container">
+    <h1 class="display-4">Our offer // {{ menu.name }}</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Offer name</th>
+            <th>Properties</th>
+            <th>Offer price</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for offer_category, offer_list in offers.items %}
+            <tr>
+                <td colspan="3"><strong>{{ offer_category }}</strong></td>
+            </tr>
+            {% for offer in offer_list %}
+                <tr>
+                    <td class="px-5">{{ offer.name }}</td>
+                    <td>
+                        {% if offer.volume %}
+                            <span class="border p-1 rounded">{{ offer.volume|floatformat:3 }}l</span>
+                        {% endif %}
+
+                        {% if offer.weight %}
+                            <span class="border p-1 rounded">{{ offer.weight|floatformat:3 }}kg</span>
+                        {% endif %}
+
+                        {% if offer.alcohol_by_volume %}
+                            <span class="bg-danger text-white p-1 rounded">Alc: {{ offer.alcohol_by_volume }}%vol</span>
+                        {% endif %}
+
+                        {% if offer.is_served_cold %}
+                            <span class="bg-primary text-white p-1 rounded">Served cold</span>
+                        {% endif %}
+
+                    </td>
+                    <td>{{ offer.price|floatformat:2 }}zł</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>

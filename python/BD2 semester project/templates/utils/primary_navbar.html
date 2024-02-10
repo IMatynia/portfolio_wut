@@ -1,0 +1,24 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Restaurant manager</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#primaryNavBar"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="primaryNavBar">
+            <ul class="navbar-nav ms-auto">
+                {% for nav_item in nav_items %}
+                    {% if request.path == "/"|add:nav_item.url_path %}
+                        <li class="nav-item active">
+                            <a class="nav-link active" href="/{{ nav_item.url_path }}">{{ nav_item.name|upper }}</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link " href="/{{ nav_item.url_path }}">{{ nav_item.name|upper }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</nav>

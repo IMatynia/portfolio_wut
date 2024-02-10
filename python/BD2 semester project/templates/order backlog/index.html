@@ -1,0 +1,70 @@
+<html>
+{% include 'utils/head_dependencies.html' with title='Order backlog' %}
+
+<body>
+{% include 'utils/primary_navbar.html' with nav_items=nav_items %}
+
+<script>
+    $(document).ready(function () {
+        $(".order-remove-button").click(function () {
+            sendDataToEndpointAndReload(
+                "/api/removeorder",
+                exctractPayloadFromProperties($(this), ["order"])
+            );
+        })
+    });
+</script>
+
+<div class="container">
+    <h1 class="display-4">Order backlog</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ord. Time</th>
+            <th>Order contents</th>
+            <th>Tables</th>
+            <th>Assignee</th>
+            <th>Options</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order_comp in order_backlog %}
+            <tr>
+                <td>{{ order_comp.order.id }}</td>
+                <td>{{ order_comp.order.order_time }}</td>
+                <td>
+                    <div class="row">
+                        {% for offer in order_comp.offers %}
+                            <div class="row">
+                                <div class="col-10">{{ offer.name }}</div>
+                                <div class="col-2 text-end">{{ offer.price|floatformat:2 }}zł</div>
+                            </div>
+                        {% endfor %}
+                        <hr>
+                        <div class="text-end"> Suma: <strong>{{ order_comp.order.total_cost|floatformat:2 }}zł</strong></div>
+                    </div>
+                </td>
+                <td>
+                    {% if order_comp.order.takeout %}
+                        <div class="text-white bg-warning p-1 rounded text-center">TAKE OUT</div>
+                    {% else %}
+                        <ul>
+                            {% for table in order_comp.tables %}
+                                <li>
+                                    {{ table.name }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </td>
+                <td>{{ order_comp.order.employee.name }} {{ order_comp.order.employee.surname }}</td>
+                <td>
+                    <button type="button" class="btn btn-close order-remove-button"
+                            data-order="{{ order_comp.order.id }}" aria-label="Close"></button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

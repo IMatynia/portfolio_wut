@@ -1,0 +1,38 @@
+.unselecable {
+    user-select: none;
+}
+
+.table-style {
+    height: 10%;
+    width: 10%;
+    border-radius: 50%;
+    border: 5px solid;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    z-index: 1;
+}
+
+.table-style.occupied {
+    background-color: #b91433;
+    border-color: #9a0f2a;
+}
+
+.table-style.free {
+    background-color: #508911;
+    border-color: #3d690b;
+}
+
+.table-style.reserved {
+    background-color: #ceb632;
+    border-color: #ad9721;
+}
+
+.stool {
+    height: 40%;
+    width: 40%;
+    border-radius: 20%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    background-color: inherit;
+    z-index: -1;
+}

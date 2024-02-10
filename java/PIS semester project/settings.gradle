@@ -1,0 +1,9 @@
+rootProject.name = 'jenkinsPokaz'
+
+include 'service-discovery'
+include 'recipe-service'
+include 'users-service'
+include 'api-gateway'
+include 'images-service'
+include 'elastic-search-service'
+include 'config-server'

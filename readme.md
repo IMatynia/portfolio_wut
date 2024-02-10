@@ -1,10 +1,4 @@
-# Portfolio z studiów na politechnice warszawskiej / WUT studies portfolio
+# Portfolio ze studiów na politechnice warszawskiej / WUT studies portfolio
 ## Igor Matynia
 
-Each folder represents a selection of projects from some of my completed courses. Those include:
-- ARKO - Architektura komputerów / Computer architecture (Assembly)
-- PAP - Programowanie aplikacyjne / Application programming (Python/OracleSQL/PLSQL)
-- PIPR - Podstawy programowania / Introduction to programming (Python)
-- PROI - programowanie obiektowe / Object-oriented programming (C++)
-- SOI - systemy operacyjne / operating systems (C++/C)
-- WSI - wstęp do sztucznej inteligencji / introduction to artificial intelligence (Python)
+The code contained within this repository are copies of some of my projects from my time studying at Warsaw University of Technology. Each folder contains a selection of assosiated source codes and a README describing them in further detail, my involvement and the technologies used.

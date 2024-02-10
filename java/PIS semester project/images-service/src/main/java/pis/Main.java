@@ -1,0 +1,18 @@
+package pis;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+
+@SpringBootApplication
+@EnableDiscoveryClient
+public class Main {
+
+    public static String getHello() {
+        return "Hello world!";
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
+    }
+}

@@ -1,0 +1,40 @@
+<html>
+{% include 'utils/head_dependencies.html' with title='Data visualisation' %}
+
+<body>
+{% include 'utils/primary_navbar.html' with nav_items=nav_items %}
+
+<div class="container">
+    <div class="row">
+        <!-- Plot -->
+        <div class="col-lg my-2 p-2">
+            <div class="col-lg text-center">
+                {% if plot %}
+                    <div class="row">{{ plot|safe }}</div>
+                {% else %}
+                    <div class="display-5 bg-light border rounded p-5">Select variables to plot!</div>
+                {% endif %}
+            </div>
+        </div>
+        <!-- Plot variables -->
+        <div class="container">
+            {% include "plots/data_plot_form.html" with variables=variables plot_preset=plot_preset %}
+            <hr>
+            <h5>Presets:</h5>
+            <div class="d-flex gap-3 align-items-center">
+                {% for code, preset_obj in presets.items %}
+                    {% if preset_obj == plot_preset %}
+                        <a href="?preset={{ code }}" class="btn btn-primary border">{{ preset_obj.display_name }}</a>
+                    {% else %}
+                        <a href="?preset={{ code }}" class="btn btn-light border">{{ preset_obj.display_name }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>
+

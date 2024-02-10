@@ -1,0 +1,1 @@
+docker run -d --name es8111 -p 9200:9200 -e "discovery.type=single-node" -e "xpack.security.enabled=false" -e "xpack.ml.enabled=false" -e "action.destructive_requires_name=false" elasticsearch:8.11.1

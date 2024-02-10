@@ -1,0 +1,61 @@
+<div class="modal fade" id="order_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true" style="z-index: 1100;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" data-bs-dismiss="modal" class="btn-close" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% include "table manager/order_creator.html" with all_dishes=all_dishes %}
+            </div>
+            <div class="modal-footer">
+                <label for="order-select-assignee">Assign employee</label>
+                <select class="form-select" id="order-select-assignee">
+                    {% for employee in all_employees %}
+                        <option value="{{ employee.id }}">{{ employee.name }} {{ employee.surname }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="order-confirm" type="button" class="btn btn-primary">Add order</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#order_modal').on('show.bs.modal', function (event) {
+        let source = $(event.relatedTarget) // Button that triggered the modal
+        let time = source.data('time')
+        let table_id = source.data('tableid')
+        let table_name = source.data('tablename');
+
+        const modal = $(this);
+        modal.find('.modal-title').text('Add new order for table ' + table_name)
+        modal.find("#offer-selection").children().remove();
+        modal.find("#order-creator").data("table", table_id);
+    })
+
+    $("#order-confirm").on('click', function (event) {
+        const modal = $('#order_modal');
+        const offer_containers = modal.find(".offer-container");
+        let all_offer_ids = [];
+        offer_containers.each(function () {
+            all_offer_ids.push($(this).data("offer"));
+        });
+
+        const table_id = modal.find("#order-creator").data("table");
+
+        const assignee_id = modal.find("#order-select-assignee").val()
+        console.log(assignee_id);
+        console.log(modal.find("#order-select-assignee"));
+
+        payload = {
+            "offers": all_offer_ids.join(";"),
+            "table": table_id,
+            "assignee": assignee_id
+        }
+
+        sendDataToEndpointAndReload("/api/addorder", payload);
+    })
+</script>
